@@ -11,6 +11,7 @@ import {
 import { Code, Clock } from 'lucide-react'
 
 const techStackOptions = [
+  "Suggest me",
   'Next.js',
   'React',
   'Express',
@@ -30,20 +31,37 @@ const techStackOptions = [
   'Prisma',
   'tRPC',
   'GraphQL',
-  'Vite',
 ]
 
 export function LandingSelector() {
   const [showTechStack, setShowTechStack] = useState(false)
   const [showTime, setShowTime] = useState(false)
-  const [selectedTech, setSelectedTech] = useState<string[]>([])
+  const [selectedTech, setSelectedTech] = useState<string[]>(["Suggest me"])
   const [timeValue, setTimeValue] = useState('')
   const [timeUnit, setTimeUnit] = useState('months')
 
   const toggleTech = (tech: string) => {
-    setSelectedTech((prev) =>
-      prev.includes(tech) ? prev.filter((t) => t !== tech) : [...prev, tech]
-    )
+    setSelectedTech((prev) => {
+      if (tech === 'Suggest me') {
+        // If clicking "Suggest me", clear everything else and select it
+        return ['Suggest me']
+      }
+
+      // If clicking something else
+      let newSelection = prev.includes(tech)
+        ? prev.filter((t) => t !== tech)
+        : [...prev, tech]
+
+      // Remove "Suggest me" if it's there (since we picked something else)
+      newSelection = newSelection.filter((t) => t !== 'Suggest me')
+
+      // If selection becomes empty, revert to "Suggest me"
+      if (newSelection.length === 0) {
+        return ['Suggest me']
+      }
+
+      return newSelection
+    })
   }
 
   return (
@@ -118,7 +136,7 @@ export function LandingSelector() {
             <button
               key={tech}
               onClick={() => toggleTech(tech)}
-              className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium transition-colors border ${
+              className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium transition-colors border hover:cursor-pointer ${
                 selectedTech.includes(tech)
                   ? 'bg-white text-black border-white'
                   : 'bg-[#1A1A1A] hover:bg-[#252525] text-gray-400 hover:text-gray-200 border-[#333]'
