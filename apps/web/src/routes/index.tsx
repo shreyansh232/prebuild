@@ -1,118 +1,89 @@
+import { Button } from '@/components/ui/button'
+import { LandingSelector } from '@/components/landing/LandingSelector'
 import { createFileRoute } from '@tanstack/react-router'
-import {
-  Zap,
-  Server,
-  Route as RouteIcon,
-  Shield,
-  Waves,
-  Sparkles,
-} from 'lucide-react'
+import { ArrowUp } from 'lucide-react'
+import { useRef, useEffect } from 'react'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 export const Route = createFileRoute('/')({ component: App })
 
 function App() {
-  const features = [
-    {
-      icon: <Zap className="w-12 h-12 text-cyan-400" />,
-      title: 'Powerful Server Functions',
-      description:
-        'Write server-side code that seamlessly integrates with your client components. Type-safe, secure, and simple.',
-    },
-    {
-      icon: <Server className="w-12 h-12 text-cyan-400" />,
-      title: 'Flexible Server Side Rendering',
-      description:
-        'Full-document SSR, streaming, and progressive enhancement out of the box. Control exactly what renders where.',
-    },
-    {
-      icon: <RouteIcon className="w-12 h-12 text-cyan-400" />,
-      title: 'API Routes',
-      description:
-        'Build type-safe API endpoints alongside your application. No separate backend needed.',
-    },
-    {
-      icon: <Shield className="w-12 h-12 text-cyan-400" />,
-      title: 'Strongly Typed Everything',
-      description:
-        'End-to-end type safety from server to client. Catch errors before they reach production.',
-    },
-    {
-      icon: <Waves className="w-12 h-12 text-cyan-400" />,
-      title: 'Full Streaming Support',
-      description:
-        'Stream data from server to client progressively. Perfect for AI applications and real-time updates.',
-    },
-    {
-      icon: <Sparkles className="w-12 h-12 text-cyan-400" />,
-      title: 'Next Generation Ready',
-      description:
-        'Built from the ground up for modern web applications. Deploy anywhere JavaScript runs.',
-    },
-  ]
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const isMobile = useIsMobile()
 
+  const adjustTextareaHeight = () => {
+    const textarea = textareaRef.current
+    if (textarea) {
+      textarea.style.height = 'auto'
+      const scrollHeight = textarea.scrollHeight
+      const maxHeight = 200 // Max height in pixels
+      const minHeight = isMobile ? 24 : 28
+      textarea.style.height = `${Math.max(Math.min(scrollHeight, maxHeight), minHeight)}px`
+    }
+  }
+
+  useEffect(() => {
+    adjustTextareaHeight()
+  }, [isMobile])
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
-      <section className="relative py-20 px-6 text-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10"></div>
-        <div className="relative max-w-5xl mx-auto">
-          <div className="flex items-center justify-center gap-6 mb-6">
-            <img
-              src="/tanstack-circle-logo.png"
-              alt="TanStack Logo"
-              className="w-24 h-24 md:w-32 md:h-32"
-            />
-            <h1 className="text-6xl md:text-7xl font-black text-white [letter-spacing:-0.08em]">
-              <span className="text-gray-300">TANSTACK</span>{' '}
-              <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-                START
-              </span>
-            </h1>
-          </div>
-          <p className="text-2xl md:text-3xl text-gray-300 mb-4 font-light">
-            The framework for next generation AI applications
-          </p>
-          <p className="text-lg text-gray-400 max-w-3xl mx-auto mb-8">
-            Full-stack framework powered by TanStack Router for React and Solid.
-            Build modern applications with server functions, streaming, and type
-            safety.
-          </p>
-          <div className="flex flex-col items-center gap-4">
-            <a
-              href="https://tanstack.com/start"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-8 py-3 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold rounded-lg transition-colors shadow-lg shadow-cyan-500/50"
-            >
-              Documentation
-            </a>
-            <p className="text-gray-400 text-sm mt-2">
-              Begin your TanStack Start journey by editing{' '}
-              <code className="px-2 py-1 bg-slate-700 rounded text-cyan-400">
-                /src/routes/index.tsx
-              </code>
-            </p>
-          </div>
-        </div>
-      </section>
+    <div className="h-screen bg-[#0A0A0A] flex flex-col items-center justify-center relative overflow-y-auto sm:overflow-hidden font-sans text-white">
+      {/* Background Ambience */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-900/10 rounded-full blur-[120px]" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-slate-800/10 rounded-full blur-[120px]" />
+      </div>
 
-      <section className="py-16 px-6 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature, index) => (
-            <div
-              key={index}
-              className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6 hover:border-cyan-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/10"
-            >
-              <div className="mb-4">{feature.icon}</div>
-              <h3 className="text-xl font-semibold text-white mb-3">
-                {feature.title}
-              </h3>
-              <p className="text-gray-400 leading-relaxed">
-                {feature.description}
-              </p>
-            </div>
-          ))}
+      <main className="w-full max-w-3xl px-4 sm:px-6 flex flex-col items-center z-10">
+        
+        {/* Hero Text - Fixed position to prevent movement */}
+        <div className="flex flex-col items-center gap-3 sm:gap-4 text-center animate-in fade-in slide-in-from-bottom-4 duration-700 mb-6 sm:mb-10">
+           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal text-white pb-2">
+              Turn ideas into blueprints
+           </h1>
+           <p className="text-base sm:text-lg text-gray-400 max-w-2xl leading-relaxed px-2">
+              Describe your product vision, and we'll break it down into a structured, technical development plan ready for execution.
+           </p>
         </div>
-      </section>
+
+        {/* Input Container */}
+        <div className="w-full relative group animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-150">
+          
+          <div className="relative bg-[#1A1A1A] border border-[#333] rounded-[32px] sm:rounded-[40px] p-1.5 sm:p-2 pr-1.5 sm:pr-2 shadow-2xl flex items-end gap-1.5 sm:gap-2 focus-within:border-slate-600 transition-colors">
+             
+             {/* Text Input */}
+             <textarea
+                ref={textareaRef}
+                placeholder={isMobile ? "Describe your product idea..." : "Describe your product idea in detail including features, and goals..."}
+                className="flex-1 bg-transparent border-none outline-none text-gray-200 placeholder-gray-500 text-sm sm:text-base md:text-lg resize-none px-3 sm:px-4 md:px-5 py-1.5 overflow-y-auto leading-normal"
+                rows={1}
+                style={{
+                  minHeight: isMobile ? '24px' : '28px',
+                  maxHeight: '200px',
+                  height: isMobile ? '24px' : '28px',
+                }}
+                onInput={adjustTextareaHeight}
+             />
+             
+             {/* Submit Button */}
+             <Button 
+               className="h-8 w-8 sm:h-10 sm:w-10 flex items-center justify-center bg-white text-black rounded-full hover:bg-gray-200 transition-all shadow-lg shadow-white/5 disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+               aria-label="Start Planning"
+             >
+                 <ArrowUp size={16} strokeWidth={2.5} className="sm:w-5 sm:h-5" />
+             </Button>
+          </div>
+          
+           {/* Context Pills Below Input */}
+           <div className="flex flex-col items-center gap-4 mt-4 sm:mt-6 w-full">
+                <LandingSelector />
+           </div>
+        </div>
+
+        {/* Footer/Disclaimer */}
+        <p className="text-gray-600 text-xs mt-2 sm:mt-4 animate-in fade-in duration-1000 delay-300 px-4 text-center">
+            Press Enter to start planning. Generated plans are editable.
+        </p>
+      </main>
     </div>
   )
 }
